@@ -9,6 +9,7 @@ import numpy as np
 class Game:
     def __init__(self, visual=False, board=None) -> None:
         self.visual = visual
+        self.nums = np.array([2,2,2,2,2,2,2,2,2,4])
         if board is not None:
             self.board = board
             self.num_zeros = self.count_zeros()
@@ -20,34 +21,36 @@ class Game:
     # function to fill board with initial numbers
     def fill_init(self) -> None:
         poses = np.random.permutation(16)[:2]
-        nums = np.array([2,2,2,2,2,2,2,2,2,4])
-        np.random.shuffle(nums)
-        self.board[poses[0]//4,poses[0]%4] = nums[0]
-        np.random.shuffle(nums)
-        self.board[poses[1]//4,poses[1]%4] = nums[0]
+        np.random.shuffle(self.nums)
+        self.board[poses[0]//4,poses[0]%4] = self.nums[0]
+        np.random.shuffle(self.nums)
+        self.board[poses[1]//4,poses[1]%4] = self.nums[0]
 
     # function to make a left move on the board
     def left(self) -> None:
-        self.board = self.move(self.board)
+        self.board = self.add_number(self.move(self.board))
 
     # function to make a right move on the board
     def right(self) -> None:
-        self.board = np.flip(self.move(np.flip(self.board,1)),1)
+        self.board = self.add_number(np.flip(self.move(np.flip(self.board,1)),1))
 
     # function to make a up move on the board
     def up(self) -> None:
-        self.board = self.move(self.board.T).T
+        self.board = self.add_number(self.move(self.board.T).T)
 
     # function to make a down move on the board
     def down(self) -> None:
-        self.board = np.flip(self.move(np.flip(self.board.T,1)),1).T
+        self.board = self.add_number(np.flip(self.move(np.flip(self.board.T,1)),1).T)
 
     # function that takes a 4x4 matrix and returns a
     # coresponding 4x4 matrix where a left move has been
     # made
     def move(self, board) -> np.ndarray:
-        return np.array([self.shift(self.combine(self.shift(row)))
-                         for row in board])
+        return np.array([
+            self.shift(
+            self.combine(
+            self.shift(row)))
+            for row in board])
 
     # function to shift the numbers of an array over any zeros
     def shift(self, arr) -> np.ndarray:
@@ -73,6 +76,19 @@ class Game:
                 if num == 0:
                     count += 1
         return count
+    
+    # function to add a number to the board
+    def add_number(self, board) -> np.ndarray:
+        opens = []
+        for (i,row) in enumerate(board):
+            for (j,num) in enumerate(row):
+                if num == 0:
+                    opens.append((4*i)+j)
+        np.random.shuffle(opens)
+        np.random.shuffle(self.nums)
+        board[opens[0]//4,opens[0]%4] = self.nums[0]
+        return board
+
 
 if __name__ == '__main__':
     game = Game(board=np.array([[0,2,0,2],
