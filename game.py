@@ -12,6 +12,7 @@ class Game:
                  visual=False,
                  board=None,
                  add_nums=True,
+                 move_count=0,
                  print_mode_standard=True) -> None:
         self.visual = visual
         self.nums = np.array([2,2,2,2,2,2,2,2,2,4])
@@ -19,6 +20,7 @@ class Game:
         self.print_mode_standard = print_mode_standard
         self.move_dic = {}
         self.game_over = False
+        self.move_count = move_count
         if board is not None:
             self.board = board
             self.num_zeros = self.count_zeros()
@@ -46,6 +48,7 @@ class Game:
             self.board = self.move(self.board)
             if self.add_nums:
                 self.board = self.add_number(self.board)
+            self.move_count += 1
             self.update()
             return True
         return False
@@ -56,6 +59,7 @@ class Game:
             self.board = np.flip(self.move(np.flip(self.board,1)),1)
             if self.add_nums:
                 self.board = self.add_number(self.board)
+            self.move_count += 1
             self.update()
             return True
         return False
@@ -66,6 +70,7 @@ class Game:
             self.board = self.move(self.board.T).T
             if self.add_nums:
                 self.board = self.add_number(self.board)
+            self.move_count += 1
             self.update()
             return True
         return False
@@ -76,6 +81,7 @@ class Game:
             self.board = np.flip(self.move(np.flip(self.board.T,1)),1).T
             if self.add_nums:
                 self.board = self.add_number(self.board)
+            self.move_count += 1
             self.update()
             return True
         return False
@@ -171,11 +177,10 @@ class Game:
 
         # set up local variables
         running = True
-        move_count = 0
 
         # print the initial board
         self.print_board()
-        print("moves:", str(move_count), sep=" ")
+        print("moves:", str(self.move_count), sep=" ")
 
         # game loop
         while running:
@@ -193,39 +198,35 @@ class Game:
                     # check for pressing left arrow
                     elif event.key == pygame.K_LEFT:
                         if self.left():
-                            move_count += 1
-                        self.print_board()
-                        print("moves:", str(move_count), sep=" ")
-                        if self.game_over:
-                            print("Game Over :(")
-                            running = False
+                            self.print_board()
+                            print("moves:", str(self.move_count), sep=" ")
+                            if self.game_over:
+                                print("Game Over :(")
+                                running = False
                     # check for pressing right arrow
                     elif event.key == pygame.K_RIGHT:
                         if self.right():
-                            move_count += 1
-                        self.print_board()
-                        print("moves:", str(move_count), sep=" ")
-                        if self.game_over:
-                            print("Game Over :(")
-                            running = False
+                            self.print_board()
+                            print("moves:", str(self.move_count), sep=" ")
+                            if self.game_over:
+                                print("Game Over :(")
+                                running = False
                     # check for pressing up arrow
                     elif event.key == pygame.K_UP:
                         if self.up():
-                            move_count += 1
-                        self.print_board()
-                        print("moves:", str(move_count), sep=" ")
-                        if self.game_over:
-                            print("Game Over :(")
-                            running = False
+                            self.print_board()
+                            print("moves:", str(self.move_count), sep=" ")
+                            if self.game_over:
+                                print("Game Over :(")
+                                running = False
                     # check for pressing down arrow
                     elif event.key == pygame.K_DOWN:
                         if self.down():
-                            move_count += 1
-                        self.print_board()
-                        print("moves:", str(move_count), sep=" ")
-                        if self.game_over:
-                            print("Game Over :(")
-                            running = False
+                            self.print_board()
+                            print("moves:", str(self.move_count), sep=" ")
+                            if self.game_over:
+                                print("Game Over :(")
+                                running = False
 
 
 if __name__ == '__main__':
