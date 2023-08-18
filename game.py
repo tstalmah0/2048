@@ -17,13 +17,20 @@ class Game:
         self.nums = np.array([2,2,2,2,2,2,2,2,2,4])
         self.add_nums = add_nums
         self.print_mode_standard = print_mode_standard
+        self.move_dic = {}
+        self.game_over = False
         if board is not None:
             self.board = board
             self.num_zeros = self.count_zeros()
+            self.update()
         else:
             self.board = np.zeros((4,4), dtype=int)
             self.num_zeros = 14
             self.fill_init()
+            self.move_dic = {"Left":1,
+                            "Right":1,
+                            "Up":1,
+                            "Down":1}
         
     # function to fill board with initial numbers
     def fill_init(self) -> None:
@@ -35,21 +42,43 @@ class Game:
 
     # function to make a left move on the board
     def left(self) -> None:
-        self.board = self.move(self.board)
-        if self.add_nums:
-            self.board = self.add_number(self.board)
+        if self.move_dic["Left"]:
+            self.board = self.move(self.board)
+            if self.add_nums:
+                self.board = self.add_number(self.board)
+            self.update()
+            return True
+        return False
 
     # function to make a right move on the board
-    def right(self) -> None:
-        self.board = self.add_number(np.flip(self.move(np.flip(self.board,1)),1))
+    def right(self) -> bool:
+        if self.move_dic["Right"]:
+            self.board = np.flip(self.move(np.flip(self.board,1)),1)
+            if self.add_nums:
+                self.board = self.add_number(self.board)
+            self.update()
+            return True
+        return False
 
     # function to make a up move on the board
     def up(self) -> None:
-        self.board = self.add_number(self.move(self.board.T).T)
+        if self.move_dic["Up"]:
+            self.board = self.move(self.board.T).T
+            if self.add_nums:
+                self.board = self.add_number(self.board)
+            self.update()
+            return True
+        return False
 
     # function to make a down move on the board
     def down(self) -> None:
-        self.board = self.add_number(np.flip(self.move(np.flip(self.board.T,1)),1).T)
+        if self.move_dic["Down"]:
+            self.board = np.flip(self.move(np.flip(self.board.T,1)),1).T
+            if self.add_nums:
+                self.board = self.add_number(self.board)
+            self.update()
+            return True
+        return False
 
     # function that prints the board to the standard output
     def print_board(self) -> None:
@@ -63,6 +92,29 @@ class Game:
                     out = "_" if num == 0 else str(int(np.log2(num)))
                     print(out, end="")
                 print()
+
+    # function to check if left is an allowable move on the board passed
+    def check_move(self, board) -> bool:
+        for row in board:
+            for (i,num) in enumerate(row[1:]):
+                if num != 0:
+                    if row[i] == 0:
+                        return True
+                    elif row[i] == num:
+                        return True
+        return False
+    
+    # function to update the move_dic to show what moves are possible
+    def update_move_dic(self):
+        self.move_dic["Left"] = 1 if self.check_move(self.board) else 0
+        self.move_dic["Right"] = 1 if self.check_move(np.flip(self.board,1)) else 0
+        self.move_dic["Up"] = 1 if self.check_move(self.board.T) else 0
+        self.move_dic["Down"] = 1 if self.check_move(np.flip(self.board.T,1)) else 0
+
+    # function for updating class between moves
+    def update(self):
+        self.update_move_dic()
+        self.game_over = False if 1 in self.move_dic.values() else True
 
     # function that takes a 4x4 matrix and returns a
     # coresponding 4x4 matrix where a left move has been
@@ -140,28 +192,40 @@ class Game:
                         running = False
                     # check for pressing left arrow
                     elif event.key == pygame.K_LEFT:
-                        move_count += 1
-                        self.left()
+                        if self.left():
+                            move_count += 1
                         self.print_board()
                         print("moves:", str(move_count), sep=" ")
+                        if self.game_over:
+                            print("Game Over :(")
+                            running = False
                     # check for pressing right arrow
                     elif event.key == pygame.K_RIGHT:
-                        move_count += 1
-                        self.right()
+                        if self.right():
+                            move_count += 1
                         self.print_board()
                         print("moves:", str(move_count), sep=" ")
+                        if self.game_over:
+                            print("Game Over :(")
+                            running = False
                     # check for pressing up arrow
                     elif event.key == pygame.K_UP:
-                        move_count += 1
-                        self.up()
+                        if self.up():
+                            move_count += 1
                         self.print_board()
                         print("moves:", str(move_count), sep=" ")
+                        if self.game_over:
+                            print("Game Over :(")
+                            running = False
                     # check for pressing down arrow
                     elif event.key == pygame.K_DOWN:
-                        move_count += 1
-                        self.down()
+                        if self.down():
+                            move_count += 1
                         self.print_board()
                         print("moves:", str(move_count), sep=" ")
+                        if self.game_over:
+                            print("Game Over :(")
+                            running = False
 
 
 if __name__ == '__main__':
