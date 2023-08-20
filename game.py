@@ -2,7 +2,7 @@
 #
 # Started 6/5/23
 #
-# class for playing a game
+# class for playing a game of 2048
 
 import numpy as np
 import pygame
