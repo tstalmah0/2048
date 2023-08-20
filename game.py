@@ -169,6 +169,14 @@ class Game:
         board[opens[0]//4,opens[0]%4] = self.nums[0]
         return board
     
+    # function to compare self.board to the board that is passed
+    def compare_board(self, board) -> bool:
+        for row1,row2 in zip(self.board,board):
+            for num1,num2 in zip(row1,row2):
+                if num1 != num2:
+                    return False
+        return True
+    
     # function to work as game loop
     def game_loop(self):
         # set up the pygame variables
@@ -230,7 +238,15 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(print_mode_standard=False)
-    game.game_loop()
+    # game = Game(print_mode_standard=False)
+    # game.game_loop()
+    game = Game(board=np.array([[1,1,1,1],
+                       [1,1,1,1],
+                       [1,1,1,1],
+                       [1,1,1,1]]))
+    print(game.compare_board(np.array([[1,1,1,1],
+                       [1,1,1,1],
+                       [1,1,1,1],
+                       [1,1,1,1]])))
 
     
