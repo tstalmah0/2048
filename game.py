@@ -85,6 +85,14 @@ class Game:
             self.update()
             return True
         return False
+    
+    # function to set board to a new board
+    def set_board(self, board, move_count = None) -> None:
+        self.board = board
+        self.num_zeros = self.count_zeros()
+        self.update()
+        if move_count:
+            self.move_count = move_count
 
     # function that prints the board to the standard output
     def print_board(self) -> None:
