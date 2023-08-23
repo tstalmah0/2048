@@ -246,15 +246,7 @@ class Game:
 
 
 if __name__ == '__main__':
-    # game = Game(print_mode_standard=False)
-    # game.game_loop()
-    game = Game(board=np.array([[1,1,1,1],
-                       [1,1,1,1],
-                       [1,1,1,1],
-                       [1,1,1,1]]))
-    print(game.compare_board(np.array([[1,1,1,1],
-                       [1,1,1,1],
-                       [1,1,1,1],
-                       [1,1,1,1]])))
+    game = Game(print_mode_standard=False)
+    game.game_loop()
 
     
