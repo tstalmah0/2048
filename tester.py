@@ -96,7 +96,7 @@ class Test_Game(ut.TestCase):
                                  [0,0,0,0],
                                  [0,0,0,0]])
         self.assertTrue(game.compare_board(left_correct),
-                        "Game failed to combine numbera left on no number " +
+                        "Game failed to combine numbers left on no number " +
                         "added mode.")
         
         # test for combining numbers right
@@ -141,5 +141,49 @@ class Test_Game(ut.TestCase):
                         "Game failed to combine numbers down on no number " +
                         "added mode.")
         
+    # function for testing adding number on move that happened
+    def test_add_number(self):
+        game = Game()
+
+        # test for adding number on left move
+        game.set_board(np.array([[0,0,0,2],
+                                 [0,0,0,0],
+                                 [0,0,0,0],
+                                 [0,0,0,0]]))
+        game.left()
+        self.assertEqual(game.num_zeros, 14,
+                        "Game failed to add number on succesful " +
+                        "left move.")
+        
+        # test for adding number on right move
+        game.set_board(np.array([[2,0,0,0],
+                                 [0,0,0,0],
+                                 [0,0,0,0],
+                                 [0,0,0,0]]))
+        game.right()
+        self.assertEqual(game.num_zeros, 14,
+                        "Game failed to add number on succesful " +
+                        "right move.")
+        
+        # test for adding number on up move
+        game.set_board(np.array([[0,0,0,0],
+                                 [0,0,0,0],
+                                 [0,0,0,0],
+                                 [2,0,0,0]]))
+        game.up()
+        self.assertEqual(game.num_zeros, 14,
+                        "Game failed to add number on succesful " +
+                        "up move.")
+
+        # test for adding number on down move
+        game.set_board(np.array([[0,0,0,2],
+                                 [0,0,0,0],
+                                 [0,0,0,0],
+                                 [0,0,0,0]]))
+        game.down()
+        self.assertEqual(game.num_zeros, 14,
+                        "Game failed to add number on succesful " +
+                        "down move.")
+
 if __name__ == '__main__':
     ut.main()

@@ -175,6 +175,7 @@ class Game:
         np.random.shuffle(opens)
         np.random.shuffle(self.nums)
         board[opens[0]//4,opens[0]%4] = self.nums[0]
+        self.num_zeros -= 1
         return board
     
     # function to compare self.board to the board that is passed
