@@ -1,6 +1,7 @@
-# throw away file for testng code
-def loop():
-    pass
+from pynput.keyboard import Listener
 
-if __name__ == '__main__':
-    loop()
+def on_press(k):
+    print(k)
+
+with Listener(on_press=on_press) as lis:
+    lis.join()
